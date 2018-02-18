@@ -1,4 +1,5 @@
 #include "server.h"
+#include <iostream>
 
 SERVER::SERVER(SOCKET tmp, int id)
 {
@@ -25,22 +26,37 @@ int SERVER::get_client_status()
 bool SERVER::send_command(string& command)
 {
 	const char* command_to_send = command.c_str();
-	int len = command.length();
-	int status = send(client, (char*)&len, 4, 0);
-	if (status == SOCKET_ERROR)
+	char commandLen[10];
+	_itoa_s(command.length()+1, commandLen, 10 ,10);
+
+	if(send(client, commandLen, 10, 0) == SOCKET_ERROR)
 	{
 		return false;
 	}
-	status = send(client, command_to_send, len, 0);
-	return status != SOCKET_ERROR ? true : false;
+
+	if(send(client, command_to_send, command.length() + 1, 0) == SOCKET_ERROR)
+	{
+		return false;
+	}
+	return true;
 }
 
-void SERVER::set_client_socket(SOCKET& temp)
+bool SERVER::recieve_response(string& response)
 {
-	client = temp;
-}
+	char lenOfResponse[10];   
+	if (recv(client, lenOfResponse, 10, 0) < 0) {  // TODO: Entirely new function for large data, Probably a new thread
+		return false;
+	}
 
-bool SERVER::recieve_response(char* response)
-{
+	int size = atoi(lenOfResponse) + 1;
+	char *resp = new char[size];
 
+	if(recv(client, resp, size, 0) < 0)
+	{
+		return false;
+	}
+
+	response.assign(resp);
+	delete[] resp;
+	return true;
 }

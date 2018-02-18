@@ -11,9 +11,8 @@ public:
 	SERVER() {}
 	SERVER(SOCKET, int);
 	~SERVER();
-	void set_client_socket(SOCKET&);
 	bool send_command(string&);
-	bool recieve_response(char*);
+	bool recieve_response(string&);
 	//string show_client_info();
 	int get_client_id();
 	int get_client_status();

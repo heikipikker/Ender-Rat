@@ -7,11 +7,6 @@
 using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 
-vector<SERVER*> client_array;
-vector<int> client_ids;
-int id_var = 0;
-int current_client = -1;
-
 void function_failed(char* function_name)
 {
 	cout << function_name << " function failed with error code - " << GetLastError() << endl;
@@ -169,6 +164,7 @@ void handle_client_panel(SERVER& client, string& command)
 	{
 		current_client = -1;
 	}
+	client.send_command(command);
 }
 
 bool check_current_client_id(int id)
