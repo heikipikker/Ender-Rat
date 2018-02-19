@@ -7,6 +7,11 @@
 using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 
+vector<SERVER*> client_array;
+vector<int> client_ids;
+int id_var = 1;
+int current_client = -1;
+
 void function_failed(char* function_name)
 {
 	cout << function_name << " function failed with error code - " << GetLastError() << endl;
@@ -65,7 +70,7 @@ int main()
 	{
 		function_failed("CreateThread");
 	}
-	//Sleep(10000000);
+
 	admin_mode();
 	closesocket(ListenSocket);
 	return 0;
@@ -80,14 +85,7 @@ void handle_connections(LPVOID Thread_Param)
 		ClientParam.ClientSocket = accept(ListenSocket.ListenSocket, NULL, NULL);
 		ClientParam.id = id_var;
 		cout << endl << "New Connection Detected - Client ID " << id_var << endl;
-		if(current_client == -1)
-		{
-			cout << "# ";
-		}
-		else
-		{
-			cout << "## ";
-		}
+		current_client == -1 ? cout << "# " : cout << "$ client-" << current_client << ": ";
 		CreateThread(
 			NULL,
 			NULL,
@@ -109,17 +107,23 @@ void handle_client(LPVOID ClientParam)
 	client_array.push_back(&client); // push client object's base address into global vector
 	client_ids.push_back(client.get_client_id());
 	string command;
-	while (command != "disconnect") {
+	while (client.get_client_status() != 0) {
 		if (current_client == client.get_client_id())
 		{
-			// display_client_help();
-			cout << "## ";
+			cout << "$ client-" << current_client << ": ";
 			getline(cin, command);
 			handle_client_panel(client, command);
 		}
+		else {
+			command.assign("hello");
+			client.send_command(command);  // hello is sent after every 3 seconds to check client status
+			Sleep(3000);
+		}
 	}
-	client_ids.erase(client_ids.begin() + id_pos);
-	client_array.erase(client_array.begin() + pos); // remove client object's address from global vector
+	cout << endl <<"Client with ID - " << client.get_client_id() << " disconnected" << endl;
+	current_client == -1 ? cout << "# " : cout << "$ client-" << current_client << ": ";
+	client_ids[id_pos] = 0;
+	client_array[pos] = NULL;
 }
 
 void admin_mode()
@@ -131,13 +135,15 @@ void admin_mode()
 	while(command != "quit")
 	{
 		handle_admin_command(command);
+		cout << "# ";
 		getline(cin, command);
+		Sleep(200);
 	}
 }
 
 void handle_admin_command(string& command)
 {
-	if(command.find("client ") != string::npos)          // TODO: Change this method (Made this one just for testing)
+	if(command.substr(0,7) == "client ")          // TODO: Change this method (Made this one just for testing)
 	{
 		int id;							
 		if(command.length() == 8)
@@ -156,6 +162,10 @@ void handle_admin_command(string& command)
 			}
 		}
 	}
+	else if(command == "admin help")
+	{
+		display_admin_help();
+	}
 }
 
 void handle_client_panel(SERVER& client, string& command)
@@ -163,6 +173,14 @@ void handle_client_panel(SERVER& client, string& command)
 	if(command == "exit")
 	{
 		current_client = -1;
+	}
+	else if(command == "disconnect")
+	{
+		current_client = -1;
+	}
+	else if(command == "help")
+	{
+		display_client_help();
 	}
 	client.send_command(command);
 }
@@ -183,7 +201,7 @@ void display_client_help()
 {
 	cout << "----> show <msg>   - Display a Message Box with <msg> on client's system" << endl;
 	cout << "----> exit         - Go back to admin mode" << endl;
-	cout << "----> disconnect   - Disconnect the current client" << endl << "## ";
+	cout << "----> disconnect   - Disconnect the current client" << endl;
 }
 
 void display_admin_help()

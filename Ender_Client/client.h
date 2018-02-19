@@ -7,7 +7,6 @@ using namespace std;
 class CLIENT
 {
 	SOCKET client_socket = INVALID_SOCKET;
-	struct addrinfo* result;
 public:
 	CLIENT();
 	~CLIENT();

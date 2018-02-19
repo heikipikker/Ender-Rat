@@ -31,11 +31,13 @@ bool SERVER::send_command(string& command)
 
 	if(send(client, commandLen, 10, 0) == SOCKET_ERROR)
 	{
+		client_status = 0;
 		return false;
 	}
 
 	if(send(client, command_to_send, command.length() + 1, 0) == SOCKET_ERROR)
 	{
+		client_status = 0;
 		return false;
 	}
 	return true;
@@ -45,14 +47,16 @@ bool SERVER::recieve_response(string& response)
 {
 	char lenOfResponse[10];   
 	if (recv(client, lenOfResponse, 10, 0) < 0) {  // TODO: Entirely new function for large data, Probably a new thread
+		client_status = 0;
 		return false;
 	}
 
-	int size = atoi(lenOfResponse) + 1;
+	int size = atoi(lenOfResponse);
 	char *resp = new char[size];
 
 	if(recv(client, resp, size, 0) < 0)
 	{
+		client_status = 0;
 		return false;
 	}
 

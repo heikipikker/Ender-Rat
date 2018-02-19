@@ -9,11 +9,6 @@ void handle_client_panel(SERVER&, string&);
 void handle_admin_command(string&);
 bool check_current_client_id(int);
 
-vector<SERVER*> client_array;
-vector<int> client_ids;
-int id_var = 0;
-int current_client = -1;
-
 typedef struct LSOCKET_PARAM{
 	SOCKET ListenSocket;
 }ListenSocketStruct;

@@ -20,7 +20,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, PWSTR lpCmdLine, int n
 			client.connect_to_server();
 		}
 		handle_command(command);
-		Sleep(300);
+		Sleep(500);
 	}
 	return 0;
 }
