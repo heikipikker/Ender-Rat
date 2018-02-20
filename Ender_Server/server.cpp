@@ -1,4 +1,5 @@
 #include "server.h"
+#include "com_vars.h"
 #include <iostream>
 
 SERVER::SERVER(SOCKET tmp, int id)

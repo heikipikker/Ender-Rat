@@ -150,6 +150,7 @@
     <ClCompile Include="server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="com_vars.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="server.h" />
   </ItemGroup>

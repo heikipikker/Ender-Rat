@@ -4,6 +4,7 @@
 #include <vector>
 #include "server.h"
 #include "main.h"
+#include "com_vars.h"
 using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 
