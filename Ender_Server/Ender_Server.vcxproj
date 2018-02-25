@@ -146,10 +146,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="command_def.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="command_def.h" />
     <ClInclude Include="com_vars.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="server.h" />

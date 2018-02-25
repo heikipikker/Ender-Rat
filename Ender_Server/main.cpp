@@ -3,8 +3,9 @@
 #include <iostream>
 #include <vector>
 #include "server.h"
-#include "main.h"
 #include "com_vars.h"
+#include "main.h"
+#include "command_def.h"
 using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -144,17 +145,9 @@ void admin_mode()
 
 void handle_admin_command(string& command)
 {
-	if(command.substr(0,7) == "client ")          // TODO: Change this method (Made this one just for testing)
-	{
-		int id;							
-		if(command.length() == 8)
-		{
-			id = command[7] - '0';
-		}
-		else if(command.length() == 9)
-		{
-			id = ((command[7] - '0') * 10) + (command[8] - '0');
-		}
+	if(command.substr(0,7) == "client ")          
+	{						
+		int id = atoi(command.c_str() + 7);
 		if (check_current_client_id(id)) {
 			current_client = id;
 			while (current_client != -1)
@@ -178,12 +171,15 @@ void handle_client_panel(SERVER& client, string& command)
 	else if(command == "disconnect")
 	{
 		current_client = -1;
+		client.send_command(command);
 	}
 	else if(command == "help")
 	{
 		display_client_help();
 	}
-	client.send_command(command);
+	else {
+		client.send_command(command);
+	}
 }
 
 bool check_current_client_id(int id)
@@ -196,20 +192,4 @@ bool check_current_client_id(int id)
 		}
 	}
 	return false;
-}
-
-void display_client_help()
-{
-	cout << "----> show <msg>   - Display a Message Box with <msg> on client's system" << endl;
-	cout << "----> exit         - Go back to admin mode" << endl;
-	cout << "----> disconnect   - Disconnect the current client" << endl;
-}
-
-void display_admin_help()
-{
-	cout << " Commands:" << endl;
-	cout << "--> show clients - Display all the connected clients" << endl;
-	cout << "--> client <id>  - To Open Client Interacting Panel for that Client" << endl;
-	cout << "--> quit         - End this program" << endl;
-	cout << "--> admin help   - Display this help message" << endl << "# ";
 }

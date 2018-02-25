@@ -12,7 +12,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, PWSTR lpCmdLine, int n
 	init_winsock();
 	CLIENT client;
 	string command;
-	while(command != "disconnect")
+	while(true)
 	{
 		command.assign("");
 		if(client.recieve_command(command) == false)
@@ -37,5 +37,9 @@ void handle_command(string& command)
 	if(command.substr(0,5) == "show ")
 	{
 		MessageBoxA(NULL, command.c_str() + 5, "Ender", MB_OK);
+	}
+	else if(command == "disconnect")
+	{
+		ExitProcess(0);
 	}
 }

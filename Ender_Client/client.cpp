@@ -64,3 +64,4 @@ bool CLIENT::recieve_command(string& command)
 	delete[] comm;
 	return true;
 }
+

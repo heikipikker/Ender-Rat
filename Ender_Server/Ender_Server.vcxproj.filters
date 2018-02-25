@@ -21,6 +21,9 @@
     <ClCompile Include="server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="command_def.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="server.h">
@@ -30,6 +33,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="com_vars.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="command_def.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

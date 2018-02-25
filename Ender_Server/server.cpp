@@ -1,6 +1,7 @@
 #include "server.h"
 #include "com_vars.h"
 #include <iostream>
+#include <strsafe.h>
 
 SERVER::SERVER(SOCKET tmp, int id)
 {
@@ -30,7 +31,7 @@ bool SERVER::send_command(string& command)
 	char commandLen[10];
 	_itoa_s(command.length()+1, commandLen, 10 ,10);
 
-	if(send(client, commandLen, 10, 0) == SOCKET_ERROR)
+	if(send(client, commandLen, 10, 0) == SOCKET_ERROR) // send size as char buffer
 	{
 		client_status = 0;
 		return false;
@@ -46,7 +47,7 @@ bool SERVER::send_command(string& command)
 
 bool SERVER::recieve_response(string& response)
 {
-	char lenOfResponse[10];   
+	char lenOfResponse[10];    // recieve size as char buffer
 	if (recv(client, lenOfResponse, 10, 0) < 0) {  // TODO: Entirely new function for large data, Probably a new thread
 		client_status = 0;
 		return false;
@@ -65,3 +66,4 @@ bool SERVER::recieve_response(string& response)
 	delete[] resp;
 	return true;
 }
+
