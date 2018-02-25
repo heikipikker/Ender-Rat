@@ -14,7 +14,7 @@ public:
 	~SERVER();
 	bool send_command(string&);
 	bool recieve_response(string&);
-	//string show_client_info();
+	string get_username();
 	int get_client_id();
 	int get_client_status();
 };

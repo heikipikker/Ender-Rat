@@ -67,3 +67,10 @@ bool SERVER::recieve_response(string& response)
 	return true;
 }
 
+string SERVER::get_username()
+{
+	string username = "username";
+	send_command(username);
+	recieve_response(username);
+	return username;
+}
