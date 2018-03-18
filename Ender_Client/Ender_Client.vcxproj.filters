@@ -21,12 +21,18 @@
     <ClCompile Include="client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="persitence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="persistence.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

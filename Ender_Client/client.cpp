@@ -19,6 +19,7 @@ void CLIENT::connect_to_server()
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
 	getaddrinfo("127.0.0.1", "1457", &hints, &result);
+	client_socket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 	int stat = connect(client_socket, result->ai_addr, (int)result->ai_addrlen);
 	while (stat == SOCKET_ERROR) {
 		client_socket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);

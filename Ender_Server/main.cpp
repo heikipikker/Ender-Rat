@@ -193,6 +193,10 @@ void handle_client_panel(SERVER& client, string& command)
 	{
 		client.send_command(command);
 	}
+	else if(command.substr(0,5) == "speak")
+	{
+		client.send_command(command);
+	}
 }
 
 bool check_current_client_id(int id)

