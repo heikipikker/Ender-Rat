@@ -1,10 +1,10 @@
 #pragma once
 #include <WS2tcpip.h>
 #include <string>
-
+#include "persistence.h"
 using namespace std;
 
-class CLIENT
+class CLIENT : public Registry
 {
 	SOCKET client_socket = INVALID_SOCKET;
 public:

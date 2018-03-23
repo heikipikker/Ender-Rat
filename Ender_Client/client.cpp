@@ -2,7 +2,7 @@
 
 CLIENT::CLIENT()
 {
-	connect_to_server();
+
 }
 
 CLIENT::~CLIENT()

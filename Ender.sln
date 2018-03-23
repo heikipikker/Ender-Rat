@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ender_Server", "Ender_Serve
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ender_Client", "Ender_Client\Ender_Client.vcxproj", "{567806A1-20C8-479C-910E-3A3B942E022B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KeyLog_Module", "KeyLog_Module\KeyLog_Module.vcxproj", "{45406073-B6CB-499D-9E87-F9EE9DEC25FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{567806A1-20C8-479C-910E-3A3B942E022B}.Release|x64.Build.0 = Release|x64
 		{567806A1-20C8-479C-910E-3A3B942E022B}.Release|x86.ActiveCfg = Release|Win32
 		{567806A1-20C8-479C-910E-3A3B942E022B}.Release|x86.Build.0 = Release|Win32
+		{45406073-B6CB-499D-9E87-F9EE9DEC25FF}.Debug|x64.ActiveCfg = Debug|x64
+		{45406073-B6CB-499D-9E87-F9EE9DEC25FF}.Debug|x64.Build.0 = Debug|x64
+		{45406073-B6CB-499D-9E87-F9EE9DEC25FF}.Debug|x86.ActiveCfg = Debug|Win32
+		{45406073-B6CB-499D-9E87-F9EE9DEC25FF}.Debug|x86.Build.0 = Debug|Win32
+		{45406073-B6CB-499D-9E87-F9EE9DEC25FF}.Release|x64.ActiveCfg = Release|x64
+		{45406073-B6CB-499D-9E87-F9EE9DEC25FF}.Release|x64.Build.0 = Release|x64
+		{45406073-B6CB-499D-9E87-F9EE9DEC25FF}.Release|x86.ActiveCfg = Release|Win32
+		{45406073-B6CB-499D-9E87-F9EE9DEC25FF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
