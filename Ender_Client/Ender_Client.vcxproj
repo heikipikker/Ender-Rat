@@ -147,11 +147,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="core.cpp" />
+    <ClCompile Include="keylogger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="persitence.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client.h" />
+    <ClInclude Include="core.h" />
+    <ClInclude Include="keylogger.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="persistence.h" />
   </ItemGroup>

