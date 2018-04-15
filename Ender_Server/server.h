@@ -7,6 +7,8 @@ class SERVER
 	SOCKET client;
 	int client_id;
 	int client_status;
+	static string file_port_str;
+	static char* gen_random_string();
 	//char username[40];
 public:
 	SERVER() {}
@@ -17,4 +19,6 @@ public:
 	string get_username();
 	int get_client_id();
 	int get_client_status();
+	void recieve_file();
+	static void recieve_file_async(LPVOID);
 };

