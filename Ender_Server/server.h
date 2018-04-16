@@ -8,7 +8,7 @@ class SERVER
 	int client_id;
 	int client_status;
 	static string file_port_str;
-	static char* gen_random_string();
+	static string gen_random_string();
 	//char username[40];
 public:
 	SERVER() {}

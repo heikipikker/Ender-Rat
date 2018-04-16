@@ -119,6 +119,8 @@ bool Core::send_file(string filepath)
 		current_offset += bytes_sent;
 		if (bytes_sent < 0)
 		{
+			closesocket(file_socket);
+			free(file_buffer);
 			return false;
 		}
 		if (bytes_sent == 0)
@@ -127,5 +129,6 @@ bool Core::send_file(string filepath)
 		}
 	}
 	closesocket(file_socket);
+	free(file_buffer);
 	return true;
 }
