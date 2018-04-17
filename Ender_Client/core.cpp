@@ -70,7 +70,7 @@ bool Core::send_file(string filepath)
 	HANDLE file = CreateFileA(
 		filepath.c_str(),
 		GENERIC_READ,
-		0,
+		FILE_SHARE_READ,
 		NULL,
 		OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL,
@@ -81,6 +81,7 @@ bool Core::send_file(string filepath)
 
 	if(!ReadFile(file, file_buffer, filesize.LowPart, 0, NULL))
 	{
+		CloseHandle(file);
 		return false;
 	}
 
@@ -91,6 +92,7 @@ bool Core::send_file(string filepath)
 	int status = connect(file_socket, sock->ai_addr, sock->ai_addrlen);
 	if(status == SOCKET_ERROR)
 	{
+		CloseHandle(file);
 		closesocket(file_socket);
 		return false; // Transfer Failed
 	}

@@ -2,7 +2,7 @@
 #include <WS2tcpip.h>
 #include <string>
 using namespace std;
-#define IP "52.231.191.64"
+#define IP "127.0.0.1"
 #define PORT "1457"
 
 class Core

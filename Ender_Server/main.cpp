@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "server.h"
+#include "extras.h"
 #include "com_vars.h"
 #include "main.h"
 #include "command_def.h"
@@ -86,7 +87,8 @@ void handle_connections(LPVOID Thread_Param)
 		ClientSocketStruct ClientParam;
 		ClientParam.ClientSocket = accept(ListenSocket.ListenSocket, NULL, NULL);
 		ClientParam.id = id_var;
-		cout << endl << "New Connection Detected - Client ID " << id_var << endl;
+		//cout << endl << "New Connection Detected - Client ID " << id_var << endl;
+		show_update("New Connection Detected - Client ID ", id_var);
 		current_client == -1 ? cout << "# " : cout << "$ client-" << current_client << ": ";
 		CreateThread(
 			NULL,
@@ -122,7 +124,8 @@ void handle_client(LPVOID ClientParam)
 			Sleep(3000);
 		}
 	}
-	cout << endl <<"Client with ID - " << client.get_client_id() << " disconnected" << endl;
+	//cout << endl <<"Client with ID - " << client.get_client_id() << " disconnected" << endl;
+	show_update("Client with ID - ", client.get_client_id(), " disconnected");
 	if(current_client == client.get_client_id())
 	{
 		current_client = -1;
@@ -202,16 +205,4 @@ void handle_client_panel(SERVER& client, string& command)
 		client.send_command(command);
 		client.recieve_file();
 	}
-}
-
-bool check_current_client_id(int id)
-{
-	for(int i = 0; i < client_ids.size(); i++)
-	{
-		if(id == client_ids[i])
-		{
-			return true;
-		}
-	}
-	return false;
 }

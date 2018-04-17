@@ -1,5 +1,6 @@
 #include "server.h"
 #include "com_vars.h"
+#include "extras.h"
 #include <iostream>
 #include <strsafe.h>
 
@@ -81,30 +82,40 @@ void SERVER::recieve_file_async(LPVOID param)
 {
 	SOCKET file_listen_socket = socket(AF_UNSPEC, SOCK_STREAM, IPPROTO_TCP);
 	struct addrinfo *sock;
-	getaddrinfo("127.0.0.1", SERVER::file_port_str.c_str(), NULL, &sock);
+	getaddrinfo("0.0.0.0", SERVER::file_port_str.c_str(), NULL, &sock);
 	
 	if (bind(file_listen_socket, sock->ai_addr, sock->ai_addrlen))
 	{
-		cout << "Unable To Bind Socket!!!";
+		show_error("Unable To Bind Socket!");
 		return;
 	}
 
-	listen(file_listen_socket, SOMAXCONN);
+	if(listen(file_listen_socket, SOMAXCONN))
+	{
+		show_error("Listen Failed!");
+		return;
+	}
 	SOCKET file_socket = accept(file_listen_socket, NULL, NULL);
-	closesocket(file_listen_socket);
+	if(file_socket == INVALID_SOCKET)
+	{
+		show_error("Unable To accept Connection!");
+		return;
+	}
 	char file_ext[10];
 	if (recv(file_socket, file_ext, 10, 0) < 0)
 	{
+		closesocket(file_listen_socket);
 		closesocket(file_socket);
-		cout << endl << " File Transfer FAILED!!!";
+		show_error(" File Transfer Failed!");
 		return;
 	}
 
 	char file_size[15];
 	if (recv(file_socket, file_size, 15, 0) < 0)
 	{
+		closesocket(file_listen_socket);
 		closesocket(file_socket);
-		cout << endl << " File Transfer FAILED!!!";
+		show_error(" File Transfer Failed!");
 		return;
 	}
 
@@ -118,6 +129,7 @@ void SERVER::recieve_file_async(LPVOID param)
 		current_offset += bytes_recvd;
 		if (bytes_recvd < 0)
 		{
+			closesocket(file_listen_socket);
 			closesocket(file_socket);
 			return;
 		}
@@ -140,9 +152,18 @@ void SERVER::recieve_file_async(LPVOID param)
 		FILE_ATTRIBUTE_NORMAL,
 		NULL);
 
-	WriteFile(file, file_buffer, size, 0, NULL);
-	cout << endl << "File Saved at " << filepath << endl;
+	if(file == NULL)
+	{
+		show_error("CreateFile Failed!");
+	}
+
+	if(!WriteFile(file, file_buffer, size, 0, NULL))
+	{
+		show_error("Write File Failed!");
+	}
+	show_update("File Saved at " + filepath);
 	closesocket(file_socket);
+	closesocket(file_listen_socket);
 	CloseHandle(file);
 	delete[] file_buffer;
 }

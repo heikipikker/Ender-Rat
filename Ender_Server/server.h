@@ -21,4 +21,5 @@ public:
 	int get_client_status();
 	void recieve_file();
 	static void recieve_file_async(LPVOID);
+	friend void show_error(string error);
 };

