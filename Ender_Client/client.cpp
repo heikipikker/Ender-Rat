@@ -24,5 +24,9 @@ void CLIENT::speak_command(string& data)
 	pVoice->Release();
 	CoUninitialize();
 }
-
-
+/*
+void CLIENT::execute(string& command)
+{
+	
+}
+*/

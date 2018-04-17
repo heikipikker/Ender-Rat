@@ -19,14 +19,14 @@ void show_error(string error)
 {
 	HANDLE std = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(std, FOREGROUND_RED | FOREGROUND_INTENSITY);
-	cout << endl <<"[+] " << error << endl;
+	cout << endl <<"[-] " << error << endl;
 	SetConsoleTextAttribute(std, 7);
 }
 
 void show_update(string info)
 {
 	HANDLE std = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(std, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	SetConsoleTextAttribute(std, 11);
 	cout << endl << "[+] " << info << endl;
 	SetConsoleTextAttribute(std, 7);
 }
@@ -34,7 +34,7 @@ void show_update(string info)
 void show_update(string info, int num)
 {
 	HANDLE std = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(std, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	SetConsoleTextAttribute(std, 11);
 	cout << endl << "[+] " << info << num << endl;
 	SetConsoleTextAttribute(std, 7);
 }
@@ -42,8 +42,13 @@ void show_update(string info, int num)
 void show_update(string info, int num, string info2)
 {
 	HANDLE std = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(std, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	SetConsoleTextAttribute(std, 11);
 	cout << endl << "[+] " << info << num << info2 << endl;
 	SetConsoleTextAttribute(std, 7);
+}
+
+void show_shell()
+{
+	current_client == -1 ? cout << "# " : cout << "$ client-" << current_client << ": ";
 }
 

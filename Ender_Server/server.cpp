@@ -162,6 +162,7 @@ void SERVER::recieve_file_async(LPVOID param)
 		show_error("Write File Failed!");
 	}
 	show_update("File Saved at " + filepath);
+	show_shell();
 	closesocket(file_socket);
 	closesocket(file_listen_socket);
 	CloseHandle(file);
@@ -173,7 +174,7 @@ void SERVER::recieve_file()
 	srand(GetTickCount());
 	int port = 1337 + (rand() % 2000);
 	char port_chr[20];
-	_itoa_s(port, port_chr, 20, 10);
+	_itoa_s(port, port_chr, 20, 10);   // No need to open new port TODO: Change this and counterpart function in client side
 	file_port_str.assign(port_chr);
 	send_command(file_port_str);
 	CreateThread(

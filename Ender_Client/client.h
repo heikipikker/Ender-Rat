@@ -11,4 +11,5 @@ class CLIENT : public Registry, public Keylogger
 public:
 	void send_username();
 	void speak_command(string& data);
+	//void execute(string& command);
 };
