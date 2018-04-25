@@ -130,6 +130,7 @@ bool Core::send_file(string filepath)
 			break;
 		}
 	}
+	CloseHandle(file);
 	closesocket(file_socket);
 	free(file_buffer);
 	return true;
